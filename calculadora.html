@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calculadora de Produtos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      background: linear-gradient(135deg, #1e1e2f, #2c2c40);
+      color: #f8f8f2;
+      font-family: 'Roboto', sans-serif;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      background: #282a36;
+      padding: 40px;
+      border-radius: 15px;
+      max-width: 900px;
+      width: 100%;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    }
+
+    h1 {
+      text-align: center;
+      color: #8be9fd;
+      font-size: 2.8em;
+      margin-bottom: 30px;
+      text-shadow: 0 2px 5px #000;
+    }
+
+    table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 14px;
+      font-size: 1.2em;
+      border-bottom: 1px solid #44475a;
+    }
+
+    input[type="number"] {
+      width: 80px;
+      padding: 6px;
+      font-size: 1.1em;
+      background: #383a4a;
+      color: #fff;
+      border: 1px solid #6272a4;
+      border-radius: 8px;
+    }
+
+    .button-group {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    button {
+      padding: 14px 28px;
+      margin: 10px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1.1em;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .calculate {
+      background: linear-gradient(to right, #50fa7b, #44a66a);
+      color: #000;
+    }
+
+    .calculate:hover {
+      background: linear-gradient(to right, #5af786, #4cb272);
+    }
+
+    .reset {
+      background-color: #ff5555;
+      color: white;
+    }
+
+    .reset:hover {
+      background-color: #ff6e6e;
+    }
+
+    .result {
+      background: #1a1b26;
+      padding: 20px;
+      margin-top: 30px;
+      border-radius: 10px;
+      font-size: 1.2em;
+      border: 1px solid #444;
+    }
+
+    .toggle-container {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #6272a4;
+      transition: .4s;
+      border-radius: 34px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: #8be9fd;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: #50fa7b;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+
+    label {
+      font-size: 1.3em;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2em;
+      }
+      th, td {
+        font-size: 1em;
+      }
+      input[type="number"] {
+        width: 60px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Calculadora de Produtos</h1>
+
+    <div class="toggle-container">
+      <label for="parceriaToggle">Preços com Parceria</label>
+      <label class="switch">
+        <input type="checkbox" id="parceriaToggle" onchange="updatePrices()">
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <form id="calcForm">
+      <h2>Produtos</h2>
+      <table>
+        <tr><th>Produto</th><th>Preço</th><th>Quantidade</th></tr>
+        <tr><td>C4</td><td id="price_C4">R$ 4.500,00</td><td><input type="number" name="C4" min="0" value="0"></td></tr>
+        <tr><td>ALGEMA</td><td id="price_ALGEMA">R$ 3.500,00</td><td><input type="number" name="ALGEMA" min="0" value="0"></td></tr>
+        <tr><td>CAPUZ</td><td id="price_CAPUZ">R$ 3.500,00</td><td><input type="number" name="CAPUZ" min="0" value="0"></td></tr>
+        <tr><td>COLETE</td><td id="price_COLETE">R$ 3.500,00</td><td><input type="number" name="COLETE" min="0" value="0"></td></tr>
+        <tr><td>TABLET</td><td id="price_TABLET">R$ 9.000,00</td><td><input type="number" name="TABLET" min="0" value="0"></td></tr>
+      </table>
+
+      <h2>Itens da Casa</h2>
+      <table>
+        <tr><th>Item</th><th>Preço</th><th>Quantidade</th></tr>
+        <tr><td>QUADRO</td><td>R$ 25.000,00</td><td><input type="number" name="QUADRO" min="0" value="0"></td></tr>
+        <tr><td>COLAR</td><td>R$ 1.400,00</td><td><input type="number" name="COLAR" min="0" value="0"></td></tr>
+        <tr><td>RELOGIO</td><td>R$ 1.100,00</td><td><input type="number" name="RELOGIO" min="0" value="0"></td></tr>
+        <tr><td>TROFEU</td><td>R$ 1.150,00</td><td><input type="number" name="TROFEU" min="0" value="0"></td></tr>
+        <tr><td>PS5</td><td>R$ 1.500,00</td><td><input type="number" name="PS5" min="0" value="0"></td></tr>
+      </table>
+
+      <div class="button-group">
+        <button type="button" class="calculate" onclick="calcular()">Calcular</button>
+        <button type="button" class="reset" onclick="resetar()">Zerar</button>
+      </div>
+    </form>
+
+    <div id="resultado" class="result"></div>
+  </div>
+
+  <script>
+    const prices = {
+      semParceria: {
+        C4: 4500,
+        ALGEMA: 3500,
+        CAPUZ: 3500,
+        COLETE: 3500,
+        TABLET: 9000
+      },
+      comParceria: {
+        C4: 4000,
+        ALGEMA: 3000,
+        CAPUZ: 3000,
+        COLETE: 3000,
+        TABLET: 8000
+      }
+    };
+
+    const casaPrices = {
+      QUADRO: 25000,
+      COLAR: 1400,
+      RELOGIO: 1100,
+      TROFEU: 1150,
+      PS5: 1500
+    };
+
+    function formatCurrency(value) {
+      return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function updatePrices() {
+      const parceria = document.getElementById("parceriaToggle").checked;
+      const currentPrices = parceria ? prices.comParceria : prices.semParceria;
+
+      for (const item in currentPrices) {
+        document.getElementById(`price_${item}`).innerText = formatCurrency(currentPrices[item]);
+      }
+    }
+
+    function calcular() {
+      const form = document.forms["calcForm"];
+      const parceria = document.getElementById("parceriaToggle").checked;
+      const currentPrices = parceria ? prices.comParceria : prices.semParceria;
+
+      let totalNormal = 0;
+      for (const item in currentPrices) {
+        const qty = parseInt(form[item].value) || 0;
+        totalNormal += currentPrices[item] * qty;
+      }
+
+      let totalCasa = 0;
+      for (const item in casaPrices) {
+        const qty = parseInt(form[item].value) || 0;
+        totalCasa += casaPrices[item] * qty;
+      }
+
+      const taxaCasa = totalCasa * 0.30;
+      const clienteRecebe = totalCasa * 0.70;
+      const faccaoCasa = taxaCasa * 0.5;
+      const funcionarioCasa = taxaCasa * 0.5;
+
+      const faccaoNormal = totalNormal * 0.6;
+      const funcionarioNormal = totalNormal * 0.4;
+
+      const totalFac = faccaoCasa + faccaoNormal;
+      const totalFunc = funcionarioCasa + funcionarioNormal;
+      const totalVenda = totalNormal + totalCasa;
+
+      document.getElementById("resultado").innerHTML = `
+        <div><strong>🧾 Total Produtos:</strong> ${formatCurrency(totalNormal)}</div>
+        <div><strong>🏠 Total Itens da Casa:</strong> ${formatCurrency(totalCasa)}</div>
+        <div><strong>💸 Cliente Recebe (70% Casa):</strong> ${formatCurrency(clienteRecebe)}</div>
+        <div><strong>📈 Taxa (30% Casa):</strong> ${formatCurrency(taxaCasa)}</div>
+        <div><strong>🛠️ Funcionário Recebe:</strong> ${formatCurrency(totalFunc)}</div>
+        <div><strong>🏴‍☠️ Facção Recebe:</strong> ${formatCurrency(totalFac)}</div>
+        <div><strong>📊 Total Geral da Venda:</strong> ${formatCurrency(totalVenda)}</div>
+      `;
+    }
+
+    function resetar() {
+      const form = document.forms["calcForm"];
+      for (const input of form.querySelectorAll('input[type="number"]')) {
+        input.value = 0;
+      }
+      document.getElementById("resultado").innerHTML = "";
+      document.getElementById("parceriaToggle").checked = false;
+      updatePrices();
+    }
+
+    window.onload = updatePrices;
+  </script>
+</body>
+</html>
